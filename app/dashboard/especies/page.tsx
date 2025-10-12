@@ -44,10 +44,10 @@ export default function EspeciesPage() {
   });
 
   // 4. Obtener categorías y estados únicos
-  const categorias = ["Todas", ...new Set(especies?.map((e) => e.categoria).filter(Boolean) || [])];
+  const categorias = ["Todas", ...new Set(especies?.map((e) => e.categoria).filter((c): c is string => !!c) || [])];
   const estados = [
     "Todos",
-    ...new Set(especies?.map((e) => e.estado_conservacion).filter(Boolean) || []),
+    ...new Set(especies?.map((e) => e.estado_conservacion).filter((e): e is string => !!e) || []),
   ];
 
   // 5. Función para obtener color según estado de conservación
