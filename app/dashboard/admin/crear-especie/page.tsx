@@ -73,19 +73,20 @@ export default function CrearEspeciePage() {
     }
 
     // 7. Convertir valores numéricos
-    const data = {
+    const data: any = {
       nombre_comun: formData.nombre_comun.trim(),
       nombre_cientifico: formData.nombre_cientifico.trim(),
       descripcion: formData.descripcion.trim(),
-      habitat: formData.habitat.trim() || null,
-      estado_conservacion: formData.estado_conservacion || null,
-      categoria: formData.categoria || null,
-      profundidad_min: formData.profundidad_min ? parseInt(formData.profundidad_min) : null,
-      profundidad_max: formData.profundidad_max ? parseInt(formData.profundidad_max) : null,
-      temperatura_min: formData.temperatura_min ? parseFloat(formData.temperatura_min) : null,
-      temperatura_max: formData.temperatura_max ? parseFloat(formData.temperatura_max) : null,
-      url_imagen: formData.url_imagen.trim() || null,
     };
+
+    if (formData.habitat.trim()) data.habitat = formData.habitat.trim();
+    if (formData.estado_conservacion) data.estado_conservacion = formData.estado_conservacion;
+    if (formData.categoria) data.categoria = formData.categoria;
+    if (formData.profundidad_min) data.profundidad_min = parseInt(formData.profundidad_min);
+    if (formData.profundidad_max) data.profundidad_max = parseInt(formData.profundidad_max);
+    if (formData.temperatura_min) data.temperatura_min = parseFloat(formData.temperatura_min);
+    if (formData.temperatura_max) data.temperatura_max = parseFloat(formData.temperatura_max);
+    if (formData.url_imagen.trim()) data.url_imagen = formData.url_imagen.trim();
 
     createMutation.mutate(data);
   };
