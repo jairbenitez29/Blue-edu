@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, ExternalLink, Globe, BookOpen, Fish, Loader2 } from "lucide-react";
 import { trpc } from "@/utils/trpc";
 
-export default function WebContentPage() {
+// 1. Componente cliente que usa useSearchParams
+function WebContentClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [user, setUser] = useState<any>(null);
@@ -209,5 +210,23 @@ export default function WebContentPage() {
         </article>
       </div>
     </div>
+  );
+}
+
+// 2. Componente principal con Suspense boundary
+export default function WebContentPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50 flex items-center justify-center">
+          <div className="text-center">
+            <Loader2 className="w-12 h-12 text-blue-500 animate-spin mx-auto mb-4" />
+            <p className="text-gray-600">Cargando contenido...</p>
+          </div>
+        </div>
+      }
+    >
+      <WebContentClient />
+    </Suspense>
   );
 }
