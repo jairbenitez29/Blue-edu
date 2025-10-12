@@ -151,14 +151,14 @@ export default function SimuladorPage() {
       return;
     }
 
+    if (!user?.id) {
+      alert("Error: Usuario no identificado");
+      return;
+    }
+
     guardarMutation.mutate({
+      usuario_id: user.id,
       nombre: nombreSimulacion,
-      temperatura: parametros.temperatura,
-      ph: parametros.ph,
-      salinidad: parametros.salinidad,
-      co2: parametros.co2,
-      profundidad: parametros.profundidad,
-      salud_coral: saludCoral,
     });
   };
 
@@ -338,10 +338,10 @@ export default function SimuladorPage() {
                   />
                   <button
                     onClick={guardarSimulacion}
-                    disabled={guardarMutation.isLoading}
+                    disabled={guardarMutation.isPending}
                     className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 transition-all disabled:opacity-50"
                   >
-                    {guardarMutation.isLoading ? (
+                    {guardarMutation.isPending ? (
                       <Loader2 className="w-5 h-5 animate-spin" />
                     ) : (
                       <Save className="w-5 h-5" />
