@@ -313,10 +313,10 @@ export default function CrearEspeciePage() {
             <div className="flex gap-4 pt-6 border-t">
               <button
                 type="submit"
-                disabled={createMutation.isLoading}
+                disabled={createMutation.isPending}
                 className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 rounded-lg font-medium hover:from-green-700 hover:to-emerald-700 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {createMutation.isLoading ? (
+                {createMutation.isPending ? (
                   <>
                     <Loader2 className="w-5 h-5 animate-spin" />
                     Creando...
