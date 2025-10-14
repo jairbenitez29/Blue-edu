@@ -1,0 +1,25 @@
+# Archivos de desarrollo
+.env.local
+.env*.local
+
+# Archivos de Node
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Archivos de Prisma (se regeneran en build)
+/prisma/migrations
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de test
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# Documentación
+README.md
+*.md

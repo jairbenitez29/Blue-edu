@@ -4,67 +4,64 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
+  url      = env("MYSQL_PUBLIC_URL")
 }
 
 model Usuario {
-  id              String   @id @default(uuid())
-  email           String   @unique
-  nombre          String
-  contrasena      String
-  rol             String   @default("usuario")
-  creado_en       DateTime @default(now())
-  actualizado_en  DateTime @updatedAt
-
-  ecosistemas              Ecosistema[]
-  historial_simulaciones   HistorialSimulacion[]
-  progreso                 Progreso[]
-  certificados             Certificado[]
+  id                     String                @id @default(uuid())
+  email                  String                @unique
+  nombre                 String
+  contrasena             String
+  rol                    String                @default("usuario")
+  creado_en              DateTime              @default(now())
+  actualizado_en         DateTime              @updatedAt
+  certificados           Certificado[]
+  ecosistemas            Ecosistema[]
+  historial_simulaciones HistorialSimulacion[]
+  progreso               Progreso[]
 
   @@map("usuarios")
 }
 
 model Ecosistema {
-  id                String   @id @default(uuid())
-  usuario_id        String
-  nombre            String
-  temperatura       Float    @default(25.0)
-  salinidad         Float    @default(35.0)
-  nivel_co2         Float    @default(400.0)
-  poblacion_peces   Int      @default(50)
-  crecimiento_coral Float    @default(50.0)
-  salud_coral       Float    @default(100.0)
-  biodiversidad     Float    @default(75.0)
-  nivel_oxigeno     Float    @default(8.0)
-  activo            Boolean  @default(true)
-  creado_en         DateTime @default(now())
-  actualizado_en    DateTime @updatedAt
-
-  usuario                 Usuario               @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
-  historial_simulaciones  HistorialSimulacion[]
+  id                     String                @id @default(uuid())
+  usuario_id             String
+  nombre                 String
+  temperatura            Float                 @default(25)
+  salinidad              Float                 @default(35)
+  nivel_co2              Float                 @default(400)
+  poblacion_peces        Int                   @default(50)
+  crecimiento_coral      Float                 @default(50)
+  salud_coral            Float                 @default(100)
+  biodiversidad          Float                 @default(75)
+  nivel_oxigeno          Float                 @default(8)
+  activo                 Boolean               @default(true)
+  creado_en              DateTime              @default(now())
+  actualizado_en         DateTime              @updatedAt
+  usuario                Usuario               @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  historial_simulaciones HistorialSimulacion[]
 
   @@index([usuario_id])
   @@map("ecosistemas")
 }
 
 model HistorialSimulacion {
-  id                 String   @id @default(uuid())
-  usuario_id         String
-  ecosistema_id      String?
-  temperatura        Float
-  salinidad          Float
-  nivel_co2          Float
-  poblacion_peces    Int
-  crecimiento_coral  Float
-  salud_coral        Float
-  biodiversidad      Float
-  nivel_oxigeno      Float
-  puntuacion         Int      @default(0)
-  duracion_segundos  Int      @default(0)
-  creado_en          DateTime @default(now())
-
-  usuario     Usuario     @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
-  ecosistema  Ecosistema? @relation(fields: [ecosistema_id], references: [id], onDelete: SetNull)
+  id                String      @id @default(uuid())
+  usuario_id        String
+  ecosistema_id     String?
+  temperatura       Float
+  salinidad         Float
+  nivel_co2         Float
+  poblacion_peces   Int
+  crecimiento_coral Float
+  salud_coral       Float
+  biodiversidad     Float
+  nivel_oxigeno     Float
+  puntuacion        Int         @default(0)
+  duracion_segundos Int         @default(0)
+  creado_en         DateTime    @default(now())
+  ecosistema        Ecosistema? @relation(fields: [ecosistema_id], references: [id])
+  usuario           Usuario     @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
 
   @@index([usuario_id])
   @@index([ecosistema_id])
@@ -72,16 +69,15 @@ model HistorialSimulacion {
 }
 
 model Progreso {
-  id                   String    @id @default(uuid())
-  usuario_id           String
-  nombre_curso         String
-  instructor           String
-  porcentaje_progreso  Float     @default(0.0)
-  completado_en        DateTime?
-  creado_en            DateTime  @default(now())
-  actualizado_en       DateTime  @updatedAt
-
-  usuario Usuario @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  id                  String    @id @default(uuid())
+  usuario_id          String
+  nombre_curso        String
+  instructor          String
+  porcentaje_progreso Float     @default(0)
+  completado_en       DateTime?
+  creado_en           DateTime  @default(now())
+  actualizado_en      DateTime  @updatedAt
+  usuario             Usuario   @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
 
   @@unique([usuario_id, nombre_curso])
   @@index([usuario_id])
@@ -89,28 +85,27 @@ model Progreso {
 }
 
 model Certificado {
-  id               String   @id @default(uuid())
-  usuario_id       String
-  nombre_curso     String
-  id_verificacion  String   @unique
-  emitido_en       DateTime @default(now())
-
-  usuario Usuario @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  id              String   @id @default(uuid())
+  usuario_id      String
+  nombre_curso    String
+  id_verificacion String   @unique
+  emitido_en      DateTime @default(now())
+  usuario         Usuario  @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
 
   @@index([usuario_id])
   @@map("certificados")
 }
 
 model Articulo {
-  id              String   @id @default(uuid())
-  titulo          String
-  slug            String   @unique
-  categoria       String
-  contenido       String   @db.Text
-  url_imagen      String?
-  vistas          Int      @default(0)
-  creado_en       DateTime @default(now())
-  actualizado_en  DateTime @updatedAt
+  id             String   @id @default(uuid())
+  titulo         String
+  slug           String   @unique
+  categoria      String
+  contenido      String   @db.Text
+  url_imagen     String?
+  vistas         Int      @default(0)
+  creado_en      DateTime @default(now())
+  actualizado_en DateTime @updatedAt
 
   @@index([categoria])
   @@index([slug])
@@ -118,40 +113,40 @@ model Articulo {
 }
 
 model ArticuloInvestigacion {
-  id                  String    @id @default(uuid())
-  titulo              String
-  autor               String
-  resumen             String    @db.Text
-  contenido           String    @db.Text
-  categoria           String
-  fecha_publicacion   DateTime  @default(now())
-  url_imagen          String?
-  fuente              String?
-  palabras_clave      String?   @db.Text
-  activo              Boolean   @default(true)
-  vistas              Int       @default(0)
-  creado_en           DateTime  @default(now())
-  actualizado_en      DateTime  @updatedAt
+  id                String   @id @default(uuid())
+  titulo            String
+  autor             String
+  resumen           String   @db.Text
+  contenido         String   @db.Text
+  categoria         String
+  fecha_publicacion DateTime @default(now())
+  url_imagen        String?
+  fuente            String?
+  palabras_clave    String?  @db.Text
+  activo            Boolean  @default(true)
+  vistas            Int      @default(0)
+  creado_en         DateTime @default(now())
+  actualizado_en    DateTime @updatedAt
 
   @@index([categoria])
   @@map("articulos_investigacion")
 }
 
 model EspecieMarina {
-  id                    String    @id @default(uuid())
-  nombre_comun          String
-  nombre_cientifico     String
-  descripcion           String    @db.Text
-  habitat               String?   @db.Text
-  estado_conservacion   String?
-  profundidad_min       Int?
-  profundidad_max       Int?
-  temperatura_min       Float?
-  temperatura_max       Float?
-  url_imagen            String?
-  categoria             String?
-  creado_en             DateTime  @default(now())
-  actualizado_en        DateTime  @updatedAt
+  id                  String   @id @default(uuid())
+  nombre_comun        String
+  nombre_cientifico   String
+  descripcion         String   @db.Text
+  habitat             String?  @db.Text
+  estado_conservacion String?
+  profundidad_min     Int?
+  profundidad_max     Int?
+  temperatura_min     Float?
+  temperatura_max     Float?
+  url_imagen          String?
+  categoria           String?
+  creado_en           DateTime @default(now())
+  actualizado_en      DateTime @updatedAt
 
   @@index([categoria])
   @@index([estado_conservacion])
@@ -159,11 +154,11 @@ model EspecieMarina {
 }
 
 model CacheBusqueda {
-  id                 String   @id @default(uuid())
-  query              String   @unique
-  resultados         String   @db.Text
-  fecha_expiracion   DateTime
-  creado_en          DateTime @default(now())
+  id               String   @id @default(uuid())
+  query            String   @unique
+  resultados       String   @db.Text
+  fecha_expiracion DateTime
+  creado_en        DateTime @default(now())
 
   @@index([query])
   @@index([fecha_expiracion])
